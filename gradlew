@@ -1,3 +1,9 @@
-#!/usr/bin/env bash
-export GRADLE_HOME=/home/workdir/gradle-dist/gradle-8.9
-exec "$GRADLE_HOME/bin/gradle" "$@"
+#!/bin/sh
+APP_HOME=\( ( cd " \){0%/*}" && pwd -P ) || exit
+CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
+if [ -n "$JAVA_HOME" ] ; then
+  JAVACMD=$JAVA_HOME/bin/java
+else
+  JAVACMD=java
+fi
+exec "$JAVACMD" -Xmx64m -Xms64m -classpath "\( CLASSPATH" org.gradle.wrapper.GradleWrapperMain " \)@"
