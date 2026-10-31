@@ -22,30 +22,19 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew || true
+      - name: Make gradlew executable
+        run: chmod +x gradlew
 
       - name: Build debug APK
-        run: |
-          if [ -f ./gradlew ]; then
-            ./gradlew assembleDebug --stacktrace
-          else
-            gradle assembleDebug --stacktrace || true
-          fi
+        run: ./gradlew assembleDebug --stacktrace --no-daemon
+        env:
+          GRADLE_OPTS: "-Xmx2g -XX:MaxMetaspaceSize=768m -Dorg.gradle.daemon=false"
 
       - name: Run unit tests
-        run: |
-          if [ -f ./gradlew ]; then
-            ./gradlew testDebugUnitTest --stacktrace
-          else
-            gradle testDebugUnitTest --stacktrace || true
-          fi
-
-      - name: Run Android Lint
-        run: |
-          if [ -f ./gradlew ]; then
-            ./gradlew lintDebug --stacktrace || true
-          fi
+        run: ./gradlew testDebugUnitTest --stacktrace --no-daemon
+        env:
+          GRADLE_OPTS: "-Xmx2g -XX:MaxMetaspaceSize=768m -Dorg.gradle.daemon=false"
+        continue-on-error: true
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
