@@ -1,0 +1,6 @@
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class com.evilgpt.app.** { *; }
+-dontwarn okhttp3.**
+-dontwarn retrofit2.**
+-dontwarn com.squareup.moshi.**
